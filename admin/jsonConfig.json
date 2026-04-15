@@ -1,0 +1,114 @@
+{
+  "type": "tabs",
+  "items": {
+    "mainTab": {
+      "type": "panel",
+      "label": {
+        "en": "General",
+        "de": "Allgemein"
+      },
+      "items": {
+        "apiKey": {
+          "type": "password",
+          "label": {
+            "en": "Parcel API key",
+            "de": "Parcel API-Key"
+          },
+          "help": {
+            "en": "Create the key at web.parcelapp.net. It is stored as encryptedNative in io-package.json.",
+            "de": "Den Schlüssel erzeugst du unter web.parcelapp.net. Er wird als encryptedNative im io-package.json gespeichert."
+          },
+          "sm": 12,
+          "md": 8,
+          "lg": 6
+        },
+        "filterMode": {
+          "type": "select",
+          "label": {
+            "en": "Filter mode",
+            "de": "Filtermodus"
+          },
+          "options": [
+            {
+              "label": {
+                "en": "Active deliveries",
+                "de": "Aktive Lieferungen"
+              },
+              "value": "active"
+            },
+            {
+              "label": {
+                "en": "Recent deliveries",
+                "de": "Letzte Lieferungen"
+              },
+              "value": "recent"
+            }
+          ],
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        },
+        "pollIntervalMinutes": {
+          "type": "number",
+          "label": {
+            "en": "Polling interval (minutes)",
+            "de": "Polling-Intervall (Minuten)"
+          },
+          "help": {
+            "en": "Parcel documents a rate limit of 20 requests per hour. The adapter enforces a minimum of 3 minutes.",
+            "de": "Parcel dokumentiert ein Limit von 20 Requests pro Stunde. Der Adapter erzwingt daher mindestens 3 Minuten."
+          },
+          "min": 3,
+          "step": 1,
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        },
+        "requestTimeoutMs": {
+          "type": "number",
+          "label": {
+            "en": "Request timeout (ms)",
+            "de": "Request-Timeout (ms)"
+          },
+          "min": 5000,
+          "step": 1000,
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        },
+        "maxItemsInHtml": {
+          "type": "number",
+          "label": {
+            "en": "Max items in VIS HTML",
+            "de": "Max. Einträge im VIS-HTML"
+          },
+          "min": 1,
+          "step": 1,
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        },
+        "showTrackingNumberInHtml": {
+          "type": "checkbox",
+          "label": {
+            "en": "Show tracking number in VIS HTML",
+            "de": "Trackingnummer im VIS-HTML anzeigen"
+          },
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        },
+        "logRawResponse": {
+          "type": "checkbox",
+          "label": {
+            "en": "Log raw API response (debug)",
+            "de": "Rohantwort der API loggen (Debug)"
+          },
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        }
+      }
+    }
+  }
+}

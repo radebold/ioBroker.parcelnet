@@ -1,0 +1,82 @@
+{
+  "common": {
+    "name": "parcelnet",
+    "version": "0.5.0",
+    "news": {
+      "0.5.0": {
+        "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
+        "de": "Erste TypeScript-Adapterversion mit Parcel-API-Polling, Einzelzuständen, manuellem Refresh und VIS-HTML-Ausgabe."
+      }
+    },
+    "titleLang": {
+      "en": "ParcelNet",
+      "de": "ParcelNet"
+    },
+    "desc": {
+      "en": "Reads active or recent deliveries from Parcel App and exposes them as ioBroker states.",
+      "de": "Liest aktive oder kürzliche Sendungen aus Parcel App und stellt sie als ioBroker-States bereit."
+    },
+    "authors": [
+      "Thomas Radebold / OpenAI"
+    ],
+    "keywords": [
+      "parcel",
+      "deliveries",
+      "tracking",
+      "logistics"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "parcelnet.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/radebold/parcelnet/main/admin/parcelnet.png",
+    "readme": "https://github.com/radebold/parcelnet/blob/main/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "misc-data",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "materialize": true,
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=3.3.0"
+      }
+    ]
+  },
+  "protectedNative": [
+    "apiKey"
+  ],
+  "encryptedNative": [
+    "apiKey"
+  ],
+  "native": {
+    "apiKey": "",
+    "filterMode": "active",
+    "pollIntervalMinutes": 15,
+    "requestTimeoutMs": 15000,
+    "maxItemsInHtml": 10,
+    "showTrackingNumberInHtml": true,
+    "logRawResponse": false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "name": "Connected to Parcel API",
+        "type": "boolean",
+        "role": "indicator.connected",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
+}
