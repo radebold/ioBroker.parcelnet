@@ -138,3 +138,7 @@ Zusätzlich gibt es jetzt eigene States für Zähler:
 
 - `parcelnet.0.deliveries.activeCount`
 - `parcelnet.0.deliveries.inDeliveryCount`
+
+
+## 0.6.3-hotfix6
+- Korrigierte Carrier-Logo-Auswahl in der Admin-UI mit `fileSelector` gemäß json-config-Doku (`objectID` + `upload`).
