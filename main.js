@@ -45,6 +45,34 @@ const STATUS_TEXT = {
     7: "Ausnahme / Aufmerksamkeit nötig",
     8: "Elektronisch angekündigt",
 };
+const CARRIER_META = {
+    parcel: { key: "parcel", name: "Parcel", icon: "/adapter/parcelnet/carriers/parcel.svg" },
+    dhl: { key: "dhl", name: "DHL", icon: "/adapter/parcelnet/carriers/dhl.svg" },
+    hermes: { key: "hermes", name: "Hermes", icon: "/adapter/parcelnet/carriers/hermes.svg" },
+    dpd: { key: "dpd", name: "DPD", icon: "/adapter/parcelnet/carriers/dpd.svg" },
+    ups: { key: "ups", name: "UPS", icon: "/adapter/parcelnet/carriers/ups.svg" },
+    amazon: { key: "amazon", name: "Amazon", icon: "/adapter/parcelnet/carriers/amazon.svg" },
+    gls: { key: "gls", name: "GLS", icon: "/adapter/parcelnet/carriers/gls.svg" },
+    deutschepost: { key: "deutschepost", name: "Deutsche Post", icon: "/adapter/parcelnet/carriers/deutschepost.svg" },
+    fedex: { key: "fedex", name: "FedEx", icon: "/adapter/parcelnet/carriers/fedex.svg" },
+};
+const CARRIER_ALIASES = {
+    dhlde: "dhl",
+    dhlparcel: "dhl",
+    dhlpaket: "dhl",
+    hermesworld: "hermes",
+    myhermes: "hermes",
+    dpdde: "dpd",
+    dpdgroup: "dpd",
+    unitedparcelservice: "ups",
+    amazonlogistics: "amazon",
+    amazonshipping: "amazon",
+    amz: "amazon",
+    glsgermany: "gls",
+    deutschepost: "deutschepost",
+    post: "deutschepost",
+    germanpost: "deutschepost",
+};
 class ParcelNet extends utils.Adapter {
     pollTimer = null;
     refreshInProgress = false;
@@ -163,6 +191,42 @@ class ParcelNet extends utils.Adapter {
                 read: true,
                 write: false,
                 def: "",
+            },
+            native: {},
+        });
+        await this.extendObjectAsync("allProviderJson", {
+            type: "state",
+            common: {
+                name: "JSON für VIS json-Widget (alle Lieferungen)",
+                type: "string",
+                role: "json",
+                read: true,
+                write: false,
+                def: "[]",
+            },
+            native: {},
+        });
+        await this.extendObjectAsync("inDelivery", {
+            type: "state",
+            common: {
+                name: "JSON für VIS json-Widget (in Zustellung)",
+                type: "string",
+                role: "json",
+                read: true,
+                write: false,
+                def: "[]",
+            },
+            native: {},
+        });
+        await this.extendObjectAsync("inDeliveryCount", {
+            type: "state",
+            common: {
+                name: "Anzahl Lieferungen in Zustellung",
+                type: "number",
+                role: "value",
+                read: true,
+                write: false,
+                def: 0,
             },
             native: {},
         });
@@ -302,11 +366,16 @@ class ParcelNet extends utils.Adapter {
             const formatted = this.buildFormattedList(deliveries);
             const nextEta = this.getNextEta(deliveries);
             const arrivingToday = this.countArrivingToday(deliveries);
+            const jsonRows = this.buildJsonRows(deliveries);
+            const inDeliveryRows = jsonRows.filter(row => row.isInDelivery);
             await this.setStateAsync("deliveries.count", { val: deliveries.length, ack: true });
             await this.setStateAsync("deliveries.json", { val: JSON.stringify(deliveries, null, 2), ack: true });
             await this.setStateAsync("deliveries.formatted", { val: formatted, ack: true });
             await this.setStateAsync("deliveries.nextEta", { val: nextEta, ack: true });
             await this.setStateAsync("deliveries.arrivingToday", { val: arrivingToday, ack: true });
+            await this.setStateAsync("allProviderJson", { val: JSON.stringify(jsonRows), ack: true });
+            await this.setStateAsync("inDelivery", { val: JSON.stringify(inDeliveryRows), ack: true });
+            await this.setStateAsync("inDeliveryCount", { val: inDeliveryRows.length, ack: true });
             await this.writeDeliveryChannels(deliveries);
             await this.writeHtml(deliveries);
             const now = new Date();
@@ -387,6 +456,63 @@ class ParcelNet extends utils.Adapter {
             clearTimeout(timeout);
         }
     }
+    normalizeCarrierKey(input) {
+        const normalized = String(input || "")
+            .toLowerCase()
+            .replace(/ä/g, "ae")
+            .replace(/ö/g, "oe")
+            .replace(/ü/g, "ue")
+            .replace(/ß/g, "ss")
+            .replace(/[^a-z0-9]/g, "");
+        return CARRIER_ALIASES[normalized] || normalized;
+    }
+    getCarrierMeta(delivery) {
+        const candidates = [
+            delivery?.carrier_code,
+            delivery?.carrier,
+            delivery?.provider,
+            delivery?.carrier_name,
+            delivery?.tracking?.carrier,
+        ];
+        for (const candidate of candidates) {
+            const key = this.normalizeCarrierKey(candidate);
+            if (key && CARRIER_META[key]) {
+                return CARRIER_META[key];
+            }
+        }
+        return CARRIER_META.parcel;
+    }
+    buildJsonRows(deliveries) {
+        return deliveries.map((delivery, index) => {
+            const latestEvent = this.getLatestEvent(delivery);
+            const carrier = this.getCarrierMeta(delivery);
+            const etaTs = this.getExpectedTimestamp(delivery);
+            const statusCode = typeof delivery.status_code === "number" ? delivery.status_code : -1;
+            return {
+                pos: index + 1,
+                id: delivery?.id || "",
+                name: delivery?.description || "",
+                title: delivery?.description || "",
+                provider: carrier.name,
+                providerCode: carrier.key,
+                carrier: carrier.name,
+                carrierCode: String(delivery?.carrier_code || carrier.key || ""),
+                icon: carrier.icon,
+                iconHtml: `<img src="${carrier.icon}" style="width:28px;height:28px;object-fit:contain;border-radius:6px;"/>`,
+                trackingNumber: String(delivery?.tracking_number || ""),
+                statusCode,
+                statusText: this.statusText(delivery?.status_code),
+                eta: this.formatEta(delivery),
+                etaTs: etaTs || 0,
+                event: String(latestEvent?.event || ""),
+                eventDate: String(latestEvent?.date || ""),
+                eventLocation: String(latestEvent?.location || ""),
+                eventAdditional: String(latestEvent?.additional || ""),
+                isInDelivery: statusCode === 4,
+                isDelivered: statusCode === 0,
+            };
+        });
+    }
     buildFormattedList(deliveries) {
         return deliveries.map((delivery, index) => `${index + 1}. ${this.formatDelivery(delivery)}`).join("\n");
     }
@@ -399,8 +525,9 @@ class ParcelNet extends utils.Adapter {
         if (typeof delivery.status_code === "number") {
             parts.push(this.statusText(delivery.status_code));
         }
-        if (delivery.carrier_code) {
-            parts.push(`Carrier: ${delivery.carrier_code}`);
+        const carrier = this.getCarrierMeta(delivery);
+        if (carrier?.name) {
+            parts.push(`Carrier: ${carrier.name}`);
         }
         if (delivery.tracking_number) {
             parts.push(`Tracking: ${delivery.tracking_number}`);
@@ -486,10 +613,13 @@ class ParcelNet extends utils.Adapter {
             const base = `deliveries.list.${slot}`;
             const delivery = deliveries[index];
             const latestEvent = this.getLatestEvent(delivery);
+            const carrier = this.getCarrierMeta(delivery);
             await this.ensureDeliveryChannel(base);
             await this.setStateAsync(`${base}.active`, { val: true, ack: true });
             await this.setStateAsync(`${base}.description`, { val: String(delivery.description || ""), ack: true });
-            await this.setStateAsync(`${base}.carrierCode`, { val: String(delivery.carrier_code || ""), ack: true });
+            await this.setStateAsync(`${base}.carrierName`, { val: String(carrier.name || ""), ack: true });
+            await this.setStateAsync(`${base}.carrierCode`, { val: String(delivery.carrier_code || carrier.key || ""), ack: true });
+            await this.setStateAsync(`${base}.carrierIcon`, { val: String(carrier.icon || ""), ack: true });
             await this.setStateAsync(`${base}.trackingNumber`, {
                 val: String(delivery.tracking_number || ""),
                 ack: true,
@@ -522,7 +652,9 @@ class ParcelNet extends utils.Adapter {
             await this.ensureDeliveryChannel(base);
             await this.setStateAsync(`${base}.active`, { val: false, ack: true });
             await this.setStateAsync(`${base}.description`, { val: "", ack: true });
+            await this.setStateAsync(`${base}.carrierName`, { val: "", ack: true });
             await this.setStateAsync(`${base}.carrierCode`, { val: "", ack: true });
+            await this.setStateAsync(`${base}.carrierIcon`, { val: "", ack: true });
             await this.setStateAsync(`${base}.trackingNumber`, { val: "", ack: true });
             await this.setStateAsync(`${base}.statusCode`, { val: -1, ack: true });
             await this.setStateAsync(`${base}.statusText`, { val: "", ack: true });
@@ -547,7 +679,9 @@ class ParcelNet extends utils.Adapter {
         const states = [
             { id: "active", type: "boolean", role: "indicator", def: false },
             { id: "description", type: "string", role: "text", def: "" },
+            { id: "carrierName", type: "string", role: "text", def: "" },
             { id: "carrierCode", type: "string", role: "text", def: "" },
+            { id: "carrierIcon", type: "string", role: "text", def: "" },
             { id: "trackingNumber", type: "string", role: "text", def: "" },
             { id: "statusCode", type: "number", role: "value", def: -1 },
             { id: "statusText", type: "string", role: "text", def: "" },
@@ -596,14 +730,20 @@ class ParcelNet extends utils.Adapter {
                 const statusText = this.statusText(delivery.status_code);
                 const eta = this.formatEta(delivery);
                 const badgeColor = this.statusColor(statusCode);
+                const carrier = this.getCarrierMeta(delivery);
                 return `
 <div style="padding:${cardPadding};border-radius:14px;background:#1f2937;color:#fff;border:1px solid rgba(255,255,255,.08);box-shadow:0 2px 10px rgba(0,0,0,.15);">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-    <div style="font-size:${titleSize};font-weight:700;line-height:1.3;">${this.escapeHtml(String(delivery.description || "Unbenannte Lieferung"))}</div>
+    <div style="display:flex;align-items:flex-start;gap:10px;min-width:0;">
+      <img src="${carrier.icon}" alt="${this.escapeHtml(carrier.name)}" style="width:${compact ? "28px" : "34px"};height:${compact ? "28px" : "34px"};object-fit:contain;border-radius:8px;background:#fff;padding:2px;flex:0 0 auto;" />
+      <div style="min-width:0;">
+        <div style="font-size:${titleSize};font-weight:700;line-height:1.3;">${this.escapeHtml(String(delivery.description || "Unbenannte Lieferung"))}</div>
+        <div style="margin-top:2px;font-size:${textSize};opacity:.78;">${this.escapeHtml(carrier.name)}</div>
+      </div>
+    </div>
     <div style="font-size:${textSize};padding:3px 8px;border-radius:999px;background:${badgeColor};white-space:nowrap;">${this.escapeHtml(statusText)}</div>
   </div>
   <div style="margin-top:6px;font-size:${textSize};opacity:.92;line-height:1.45;">
-    <div>Carrier: <b>${this.escapeHtml(String(delivery.carrier_code || "-"))}</b></div>
     ${showTracking ? `<div>Tracking: <b>${this.escapeHtml(String(delivery.tracking_number || "-"))}</b></div>` : ""}
     ${eta ? `<div>ETA: <b>${this.escapeHtml(eta)}</b></div>` : ""}
     ${latestEvent?.event ? `<div>Letztes Event: <b>${this.escapeHtml(latestEvent.event)}</b></div>` : ""}

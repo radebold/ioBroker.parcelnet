@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.5.6",
+    "version": "0.6.0",
     "news": {
       "0.5.0": {
         "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
@@ -14,6 +14,10 @@
       "0.5.6": {
         "en": "Removed the startup wrapper and embedded the runtime directly into main.js so the adapter starts reliably from ZIP installations.",
         "de": "Start-Wrapper entfernt und die Laufzeit direkt in main.js eingebettet, damit der Adapter aus ZIP-Installationen zuverlässig startet."
+      },
+      "0.6.0": {
+        "en": "Added local carrier badge icons and new JSON states for VIS json widgets, including allProviderJson and inDelivery.",
+        "de": "Lokale Carrier-Badge-Icons und neue JSON-States für VIS-json-Widgets hinzugefügt, inklusive allProviderJson und inDelivery."
       }
     },
     "titleLang": {
