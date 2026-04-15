@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "news": {
       "0.5.0": {
         "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
@@ -31,6 +31,10 @@
         "pl": "Usunięto stylizowane ikony przewoźników i pozostawiono stany JSON VIS w stylu Parcel.",
         "uk": "Видалено стилізовані значки перевізників, а JSON-стани VIS залишено у стилі Parcel.",
         "zh-cn": "已移除风格化承运商图标，并保留 Parcel 风格的 VIS JSON 状态。"
+      },
+      "0.6.2": {
+        "en": "Added ready-to-use VIS HTML with carrier logos and demo carriers when the API returns no active shipments. README expanded.",
+        "de": "Fertiges VIS-HTML mit Carrier-Logos und Demo-Carriern ergänzt, wenn die API keine aktiven Sendungen liefert. README erweitert."
       }
     },
     "titleLang": {
