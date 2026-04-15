@@ -29,8 +29,20 @@
             "de": "Filtermodus"
           },
           "options": [
-            { "label": { "en": "Active deliveries", "de": "Aktive Lieferungen" }, "value": "active" },
-            { "label": { "en": "Recent deliveries", "de": "Letzte Lieferungen" }, "value": "recent" }
+            {
+              "label": {
+                "en": "Active deliveries",
+                "de": "Aktive Lieferungen"
+              },
+              "value": "active"
+            },
+            {
+              "label": {
+                "en": "Recent deliveries",
+                "de": "Letzte Lieferungen"
+              },
+              "value": "recent"
+            }
           ],
           "sm": 12,
           "md": 4,
@@ -68,6 +80,72 @@
           },
           "min": 1,
           "step": 1,
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        },
+        "visSortBy": {
+          "type": "select",
+          "label": {
+            "en": "VIS sorting",
+            "de": "VIS-Sortierung"
+          },
+          "options": [
+            {
+              "label": {
+                "en": "Expected delivery",
+                "de": "Geplante Lieferung"
+              },
+              "value": "expected"
+            },
+            {
+              "label": {
+                "en": "Title",
+                "de": "Titel"
+              },
+              "value": "title"
+            },
+            {
+              "label": {
+                "en": "Carrier",
+                "de": "Carrier"
+              },
+              "value": "carrier"
+            },
+            {
+              "label": {
+                "en": "Status code",
+                "de": "Statuscode"
+              },
+              "value": "status"
+            }
+          ],
+          "sm": 12,
+          "md": 4,
+          "lg": 3
+        },
+        "visSortDirection": {
+          "type": "select",
+          "label": {
+            "en": "Sort direction",
+            "de": "Sortierreihenfolge"
+          },
+          "options": [
+            {
+              "label": {
+                "en": "Ascending",
+                "de": "Aufsteigend"
+              },
+              "value": "asc"
+            },
+            {
+              "label": {
+                "en": "Descending",
+                "de": "Absteigend"
+              },
+              "value": "desc"
+            }
+          ],
           "sm": 12,
           "md": 4,
           "lg": 3
@@ -141,8 +219,13 @@
         },
         "carrierLogo_parcel": {
           "type": "fileSelector",
-          "label": { "en": "Default / fallback logo", "de": "Standard-/Fallback-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "Default / fallback logo",
+            "de": "Standard-/Fallback-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -151,8 +234,13 @@
         },
         "carrierLogo_dhl": {
           "type": "fileSelector",
-          "label": { "en": "DHL logo", "de": "DHL-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "DHL logo",
+            "de": "DHL-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -160,8 +248,13 @@
         },
         "carrierLogo_hermes": {
           "type": "fileSelector",
-          "label": { "en": "Hermes logo", "de": "Hermes-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "Hermes logo",
+            "de": "Hermes-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -169,8 +262,13 @@
         },
         "carrierLogo_dpd": {
           "type": "fileSelector",
-          "label": { "en": "DPD logo", "de": "DPD-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "DPD logo",
+            "de": "DPD-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -178,8 +276,13 @@
         },
         "carrierLogo_ups": {
           "type": "fileSelector",
-          "label": { "en": "UPS logo", "de": "UPS-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "UPS logo",
+            "de": "UPS-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -187,8 +290,13 @@
         },
         "carrierLogo_amazon": {
           "type": "fileSelector",
-          "label": { "en": "Amazon logo", "de": "Amazon-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "Amazon logo",
+            "de": "Amazon-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -196,8 +304,13 @@
         },
         "carrierLogo_gls": {
           "type": "fileSelector",
-          "label": { "en": "GLS logo", "de": "GLS-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "GLS logo",
+            "de": "GLS-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -205,8 +318,13 @@
         },
         "carrierLogo_deutschepost": {
           "type": "fileSelector",
-          "label": { "en": "Deutsche Post logo", "de": "Deutsche-Post-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "Deutsche Post logo",
+            "de": "Deutsche-Post-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,
@@ -214,8 +332,13 @@
         },
         "carrierLogo_fedex": {
           "type": "fileSelector",
-          "label": { "en": "FedEx logo", "de": "FedEx-Logo" },
-          "sm": 12, "md": 6, "lg": 4,
+          "label": {
+            "en": "FedEx logo",
+            "de": "FedEx-Logo"
+          },
+          "sm": 12,
+          "md": 6,
+          "lg": 4,
           "root": "dataFiles",
           "folder": "data:vis.0/main/img/parcelnet",
           "allowUpload": true,

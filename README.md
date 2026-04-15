@@ -128,3 +128,13 @@ Schalter dafür:
 Wichtig:
 - Die Demo erscheint nur in `vis.html` und `vis.htmlCompact`
 - Die echten Lieferstates unter `deliveries.*` bleiben dabei leer
+
+
+## VIS sorting / VIS-Sortierung
+
+In the adapter config you can now choose how the VIS HTML states are sorted: expected delivery, title, carrier or status code, each ascending or descending.
+
+Zusätzlich gibt es jetzt eigene States für Zähler:
+
+- `parcelnet.0.deliveries.activeCount`
+- `parcelnet.0.deliveries.inDeliveryCount`

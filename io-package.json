@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.6.3",
+    "version": "0.6.3-hotfix4",
     "news": {
       "0.5.0": {
         "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
@@ -35,6 +35,10 @@
       "0.6.3": {
         "en": "VIS layout optimized, transparent background, optional demo mode when API is empty, and configurable carrier logos via admin file selection.",
         "de": "VIS-Layout optimiert, transparenter Hintergrund, optionaler Demo-Modus bei leerer API und konfigurierbare Carrier-Logos per Admin-Dateiauswahl."
+      },
+      "0.6.3-hotfix4": {
+        "en": "Added VIS sorting options and dedicated count states for active and in-delivery shipments.",
+        "de": "VIS-Sortierung ergänzt und eigene Zähl-States für aktive Sendungen sowie Sendungen in Zustellung hinzugefügt."
       }
     },
     "titleLang": {
@@ -101,7 +105,9 @@
     "carrierLogo_gls": "",
     "carrierLogo_deutschepost": "",
     "carrierLogo_fedex": "",
-    "carrierLogo_parcel": ""
+    "carrierLogo_parcel": "",
+    "visSortBy": "expected",
+    "visSortDirection": "asc"
   },
   "objects": [],
   "instanceObjects": [
