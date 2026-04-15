@@ -497,8 +497,6 @@ class ParcelNet extends utils.Adapter {
                 providerCode: carrier.key,
                 carrier: carrier.name,
                 carrierCode: String(delivery?.carrier_code || carrier.key || ""),
-                icon: carrier.icon,
-                iconHtml: `<img src="${carrier.icon}" style="width:28px;height:28px;object-fit:contain;border-radius:6px;"/>`,
                 trackingNumber: String(delivery?.tracking_number || ""),
                 statusCode,
                 statusText: this.statusText(delivery?.status_code),
@@ -619,7 +617,7 @@ class ParcelNet extends utils.Adapter {
             await this.setStateAsync(`${base}.description`, { val: String(delivery.description || ""), ack: true });
             await this.setStateAsync(`${base}.carrierName`, { val: String(carrier.name || ""), ack: true });
             await this.setStateAsync(`${base}.carrierCode`, { val: String(delivery.carrier_code || carrier.key || ""), ack: true });
-            await this.setStateAsync(`${base}.carrierIcon`, { val: String(carrier.icon || ""), ack: true });
+            await this.setStateAsync(`${base}.carrierIcon`, { val: "", ack: true });
             await this.setStateAsync(`${base}.trackingNumber`, {
                 val: String(delivery.tracking_number || ""),
                 ack: true,
@@ -734,8 +732,7 @@ class ParcelNet extends utils.Adapter {
                 return `
 <div style="padding:${cardPadding};border-radius:14px;background:#1f2937;color:#fff;border:1px solid rgba(255,255,255,.08);box-shadow:0 2px 10px rgba(0,0,0,.15);">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-    <div style="display:flex;align-items:flex-start;gap:10px;min-width:0;">
-      <img src="${carrier.icon}" alt="${this.escapeHtml(carrier.name)}" style="width:${compact ? "28px" : "34px"};height:${compact ? "28px" : "34px"};object-fit:contain;border-radius:8px;background:#fff;padding:2px;flex:0 0 auto;" />
+    <div style="display:flex;align-items:flex-start;gap:0;min-width:0;">
       <div style="min-width:0;">
         <div style="font-size:${titleSize};font-weight:700;line-height:1.3;">${this.escapeHtml(String(delivery.description || "Unbenannte Lieferung"))}</div>
         <div style="margin-top:2px;font-size:${textSize};opacity:.78;">${this.escapeHtml(carrier.name)}</div>

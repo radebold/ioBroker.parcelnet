@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "news": {
       "0.5.0": {
         "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
@@ -18,6 +18,19 @@
       "0.6.0": {
         "en": "Added local carrier badge icons and new JSON states for VIS json widgets, including allProviderJson and inDelivery.",
         "de": "Lokale Carrier-Badge-Icons und neue JSON-States für VIS-json-Widgets hinzugefügt, inklusive allProviderJson und inDelivery."
+      },
+      "0.6.1": {
+        "en": "Removed stylized carrier icons and kept Parcel-style VIS JSON states.",
+        "de": "Stilisierte Carrier-Icons entfernt und Parcel-artige VIS-JSON-States beibehalten.",
+        "ru": "Стилизованные иконки перевозчиков удалены, JSON-состояния для VIS сохранены в стиле Parcel.",
+        "pt": "Ícones estilizados das transportadoras removidos e mantidos os estados JSON do VIS em estilo Parcel.",
+        "nl": "Gestileerde vervoerder-iconen verwijderd en Parcel-achtige VIS-JSON-states behouden.",
+        "fr": "Icônes stylisées des transporteurs supprimées et états JSON VIS conservés dans le style Parcel.",
+        "it": "Rimosse le icone stilizzate dei corrieri e mantenuti gli stati JSON VIS in stile Parcel.",
+        "es": "Se eliminaron los iconos estilizados de transportistas y se mantuvieron los estados JSON VIS al estilo Parcel.",
+        "pl": "Usunięto stylizowane ikony przewoźników i pozostawiono stany JSON VIS w stylu Parcel.",
+        "uk": "Видалено стилізовані значки перевізників, а JSON-стани VIS залишено у стилі Parcel.",
+        "zh-cn": "已移除风格化承运商图标，并保留 Parcel 风格的 VIS JSON 状态。"
       }
     },
     "titleLang": {
