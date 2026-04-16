@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.7.0-beta.14",
+    "version": "0.7.0-beta.17",
     "news": {
       "0.5.0": {
         "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
@@ -42,6 +42,18 @@
       "0.7.0-beta.14": {
         "en": "Fixed carrier tile variable order build error.",
         "de": "Build-Fehler durch falsche Reihenfolge der Carrier-Variablen behoben."
+      },
+      "0.7.0-beta.15": {
+        "en": "Improved Deutsche Post/dp logo contrast and normalized carrier label.",
+        "de": "Kontrast für Deutsche Post/dp-Logo verbessert und Carrier-Bezeichnung normalisiert."
+      },
+      "0.7.0-beta.16": {
+        "en": "Fixed logo lookup to prefer UI-configured carrier logos after carrier normalization.",
+        "de": "Logo-Lookup korrigiert: UI-gepflegte Carrier-Logos haben jetzt nach der Carrier-Normalisierung Vorrang."
+      },
+      "0.7.0-beta.17": {
+        "en": "Updated adapter icon to the provided ParcelNet marker icon.",
+        "de": "Adapter-Icon auf das bereitgestellte ParcelNet-Marker-Icon aktualisiert."
       }
     },
     "titleLang": {
