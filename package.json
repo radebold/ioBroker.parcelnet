@@ -1,6 +1,6 @@
 {
   "name": "iobroker.parcelnet",
-  "version": "0.6.3-hotfix18",
+  "version": "0.6.3-hotfix19",
   "description": "ioBroker adapter for Parcel App deliveries",
   "author": {
     "name": "Thomas Radebold / OpenAI"

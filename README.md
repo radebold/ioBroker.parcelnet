@@ -175,3 +175,7 @@ Das vermeidet Probleme mit Berechtigungen, Pfaden und der Auswahl in der Admin-U
 ## 0.6.3-hotfix18
 - Bereinigung: unnötiges Objekt `parcelnet.0.files` entfernt.
 - Adapter legt kein `files`-Metaobjekt mehr an und versucht vorhandenes Legacy-Objekt beim Start zu löschen.
+
+
+## 0.6.3-hotfix19
+- Fix: Legacy-Objekt `parcelnet.0.files` wird beim Start rekursiv entfernt.

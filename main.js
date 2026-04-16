@@ -90,7 +90,15 @@ class ParcelNet extends utils.Adapter {
         this.on("unload", this.onUnload.bind(this));
     }
     async onReady() {
-        try { await this.delObjectAsync("files"); } catch {}
+        try {
+            await this.delObjectAsync("files", { recursive: true });
+        } catch {}
+        try {
+            const legacyObj = await this.getObjectAsync("files");
+            if (legacyObj) {
+                await this.delObjectAsync("files");
+            }
+        } catch {}
         await this.createObjects();
         this.subscribeStates("tools.refreshNow");
         const previousCountState = await this.getStateAsync("deliveries.count");
