@@ -42,6 +42,41 @@ const STATUS_TEXT: Record<number, string> = {
     8: "Elektronisch angekündigt",
 };
 
+
+const CARRIER_META: Record<string, { key: string; name: string; icon: string }> = {
+    parcel: { key: "parcel", name: "Parcel", icon: "/adapter/parcelnet/carriers/parcel.svg" },
+    dhl: { key: "dhl", name: "DHL", icon: "/adapter/parcelnet/carriers/dhl.svg" },
+    hermes: { key: "hermes", name: "Hermes", icon: "/adapter/parcelnet/carriers/hermes.svg" },
+    dpd: { key: "dpd", name: "DPD", icon: "/adapter/parcelnet/carriers/dpd.svg" },
+    ups: { key: "ups", name: "UPS", icon: "/adapter/parcelnet/carriers/ups.svg" },
+    amazon: { key: "amazon", name: "Amazon", icon: "/adapter/parcelnet/carriers/amazon.svg" },
+    gls: { key: "gls", name: "GLS", icon: "/adapter/parcelnet/carriers/gls.svg" },
+    deutschepost: { key: "deutschepost", name: "Deutsche Post", icon: "/adapter/parcelnet/carriers/deutschepost.svg" },
+    fedex: { key: "fedex", name: "FedEx", icon: "/adapter/parcelnet/carriers/fedex.svg" },
+};
+
+const CARRIER_ALIASES: Record<string, string> = {
+    dhlde: "dhl",
+    dhlparcel: "dhl",
+    dhlpaket: "dhl",
+    dp: "deutschepost",
+    post: "deutschepost",
+    deutschepost: "deutschepost",
+    germanpost: "deutschepost",
+    hermesworld: "hermes",
+    myhermes: "hermes",
+    dpdde: "dpd",
+    dpdgroup: "dpd",
+    unitedparcelservice: "ups",
+    amazonlogistics: "amazon",
+    amazonshipping: "amazon",
+    amz: "amazon",
+    amzlde: "amazon",
+    amzl: "amazon",
+    amazonde: "amazon",
+    glsgermany: "gls",
+};
+
 class ParcelNet extends utils.Adapter {
     private pollTimer: any = null;
     private refreshInProgress = false;
@@ -664,24 +699,115 @@ class ParcelNet extends utils.Adapter {
     }
 
 
-    private getCarrierMeta(delivery: ParcelDelivery): { key: string; name: string } {
-        const code = String(delivery?.carrier_code || "").toLowerCase().trim();
-        if (["amzlde", "amzl", "amazonde", "amazon", "amazon-logistics"].includes(code)) return { key: "amazon", name: "Amazon" };
-        if (code.includes("dhl")) return { key: "dhl", name: "DHL" };
-        if (code.includes("hermes")) return { key: "hermes", name: "Hermes" };
-        if (code.includes("dpd")) return { key: "dpd", name: "DPD" };
-        if (code.includes("ups")) return { key: "ups", name: "UPS" };
-        if (code.includes("gls")) return { key: "gls", name: "GLS" };
-        if (code.includes("fedex")) return { key: "fedex", name: "FedEx" };
-        if (code.includes("post")) return { key: "deutschepost", name: "Deutsche Post" };
-        return { key: code || "parcel", name: code || "Parcel" };
+    private normalizeCarrierKey(value: unknown): string {
+        const raw = String(value || "").toLowerCase().trim();
+        if (!raw) {
+            return "";
+        }
+        if (CARRIER_ALIASES[raw]) {
+            return CARRIER_ALIASES[raw];
+        }
+        if (raw.includes("amazon") || raw.startsWith("amz")) {
+            return "amazon";
+        }
+        if (raw.includes("dhl")) {
+            return "dhl";
+        }
+        if (raw == "dp" || raw.includes("deutsche") || raw.includes("post")) {
+            return "deutschepost";
+        }
+        if (raw.includes("dpd")) {
+            return "dpd";
+        }
+        if (raw.includes("hermes")) {
+            return "hermes";
+        }
+        if (raw.includes("ups")) {
+            return "ups";
+        }
+        if (raw.includes("gls")) {
+            return "gls";
+        }
+        if (raw.includes("fedex")) {
+            return "fedex";
+        }
+        return raw;
+    }
+
+    private getCarrierMeta(delivery: ParcelDelivery): { key: string; name: string; icon: string } {
+        const candidates = [
+            delivery?.carrier_code,
+            (delivery as any)?.carrier,
+            (delivery as any)?.provider,
+            (delivery as any)?.carrier_name,
+            (delivery as any)?.tracking?.carrier,
+        ];
+        for (const candidate of candidates) {
+            const key = this.normalizeCarrierKey(candidate);
+            if (key && CARRIER_META[key]) {
+                return CARRIER_META[key];
+            }
+        }
+        return CARRIER_META.parcel;
+    }
+
+    private normalizeLogoPath(value: unknown): string {
+        const input = String(value || "").trim();
+        if (!input) {
+            return "";
+        }
+        if (input.startsWith("http://") || input.startsWith("https://") || input.startsWith("/")) {
+            return input;
+        }
+        if (input.startsWith("main/")) {
+            return `/vis.0/${input}`;
+        }
+        if (input.startsWith("vis.0/")) {
+            return `/${input}`;
+        }
+        if (input.startsWith("vis.0:")) {
+            return `/${input.replace(":", "/")}`;
+        }
+        if (!input.startsWith("/") && !/^https?:/i.test(input) && !input.startsWith("data:")) {
+            return `/${this.namespace}.files/${input.replace(/^\/+/, "")}`;
+        }
+        return input;
     }
 
     private getCarrierIcon(delivery: ParcelDelivery): string {
         const carrier = this.getCarrierMeta(delivery);
-        const configured = String((this.config as any)?.[`carrierLogo_${carrier.key}`] || "").trim();
-        if (configured) return configured;
-        return `/adapter/parcelnet/carriers/${carrier.key}.svg`;
+        const configKey = `carrierLogo_${carrier.key}`;
+        const custom = this.normalizeLogoPath((this.config as any)?.[configKey]);
+        if (custom) {
+            return custom;
+        }
+        const fallback = this.normalizeLogoPath((this.config as any)?.carrierLogo_parcel);
+        if (fallback) {
+            return fallback;
+        }
+        return carrier.icon || CARRIER_META.parcel.icon;
+    }
+
+    private statusColor(code: number): string {
+        switch (code) {
+            case 0:
+                return "#16a34a";
+            case 1:
+            case 2:
+            case 3:
+                return "#3b82f6";
+            case 4:
+                return "#f97316";
+            case 5:
+                return "#7c3aed";
+            case 6:
+            case 7:
+                return "#ef4444";
+            case 8:
+                return "#14b8a6";
+            default:
+                return "#64748b";
+        }
     }
 
     private renderHtml(deliveries: ParcelDelivery[], compact: boolean): string {
@@ -700,7 +826,7 @@ class ParcelNet extends utils.Adapter {
             : items.map((delivery) => {
                 const latestEvent = this.getLatestEvent(delivery);
                 const statusCode = typeof delivery.status_code === "number" ? delivery.status_code : -1;
-                const statusText = this.statusText(delivery.status_code);
+                const statusText = this.statusText(delivery.status_code).replace(/\s*\(\d+\)$/, "");
                 const eta = this.formatEta(delivery);
                 const badgeColor = this.statusColor(statusCode);
                 const carrier = this.getCarrierMeta(delivery);

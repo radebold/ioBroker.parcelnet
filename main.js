@@ -45,6 +45,41 @@ const STATUS_TEXT = {
     7: "Ausnahme / Aufmerksamkeit nötig",
     8: "Elektronisch angekündigt",
 };
+
+const CARRIER_META = {
+    parcel: { key: "parcel", name: "Parcel", icon: "/adapter/parcelnet/carriers/parcel.svg" },
+    dhl: { key: "dhl", name: "DHL", icon: "/adapter/parcelnet/carriers/dhl.svg" },
+    hermes: { key: "hermes", name: "Hermes", icon: "/adapter/parcelnet/carriers/hermes.svg" },
+    dpd: { key: "dpd", name: "DPD", icon: "/adapter/parcelnet/carriers/dpd.svg" },
+    ups: { key: "ups", name: "UPS", icon: "/adapter/parcelnet/carriers/ups.svg" },
+    amazon: { key: "amazon", name: "Amazon", icon: "/adapter/parcelnet/carriers/amazon.svg" },
+    gls: { key: "gls", name: "GLS", icon: "/adapter/parcelnet/carriers/gls.svg" },
+    deutschepost: { key: "deutschepost", name: "Deutsche Post", icon: "/adapter/parcelnet/carriers/deutschepost.svg" },
+    fedex: { key: "fedex", name: "FedEx", icon: "/adapter/parcelnet/carriers/fedex.svg" },
+};
+
+const CARRIER_ALIASES = {
+    dhlde: "dhl",
+    dhlparcel: "dhl",
+    dhlpaket: "dhl",
+    dp: "deutschepost",
+    post: "deutschepost",
+    deutschepost: "deutschepost",
+    germanpost: "deutschepost",
+    hermesworld: "hermes",
+    myhermes: "hermes",
+    dpdde: "dpd",
+    dpdgroup: "dpd",
+    unitedparcelservice: "ups",
+    amazonlogistics: "amazon",
+    amazonshipping: "amazon",
+    amz: "amazon",
+    amzlde: "amazon",
+    amzl: "amazon",
+    amazonde: "amazon",
+    glsgermany: "gls",
+};
+
 class ParcelNet extends utils.Adapter {
     pollTimer = null;
     refreshInProgress = false;
@@ -601,6 +636,29 @@ class ParcelNet extends utils.Adapter {
         return `/adapter/parcelnet/carriers/${carrier.key}.svg`;
     }
 
+
+    statusColor(code) {
+        switch (code) {
+            case 0:
+                return "#16a34a";
+            case 1:
+            case 2:
+            case 3:
+                return "#3b82f6";
+            case 4:
+                return "#f97316";
+            case 5:
+                return "#7c3aed";
+            case 6:
+            case 7:
+                return "#ef4444";
+            case 8:
+                return "#14b8a6";
+            default:
+                return "#64748b";
+        }
+    }
+
     renderHtml(deliveries, compact) {
         const maxItems = Math.max(1, Number(this.config.maxItemsInHtml) || 10);
         const showTracking = Boolean(this.config.showTrackingNumberInHtml);
@@ -617,7 +675,7 @@ class ParcelNet extends utils.Adapter {
             : items.map((delivery) => {
                 const latestEvent = this.getLatestEvent(delivery);
                 const statusCode = typeof delivery.status_code === "number" ? delivery.status_code : -1;
-                const statusText = this.statusText(delivery.status_code);
+                const statusText = this.statusText(delivery.status_code).replace(/\s*\(\d+\)$/, "");
                 const eta = this.formatEta(delivery);
                 const badgeColor = this.statusColor(statusCode);
                 const carrier = this.getCarrierMeta(delivery);
