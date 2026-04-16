@@ -1,0 +1,129 @@
+{
+  "common": {
+    "name": "parcelnet",
+    "version": "0.7.0-beta.15",
+    "news": {
+      "0.5.0": {
+        "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
+        "de": "Erste TypeScript-Adapterversion mit Parcel-API-Polling, Einzelzuständen, manuellem Refresh und VIS-HTML-Ausgabe."
+      },
+      "0.7.0-beta.6": {
+        "en": "Beta 6: version alignment across all package files while keeping the working carrier logo UI.",
+        "de": "Beta 6: Versionsabgleich über alle Paketdateien bei Beibehaltung der funktionierenden Carrier-Logo-UI."
+      },
+      "0.7.0-beta.7": {
+        "en": "Beta 7: restored carrier logos tab and aligned all visible version strings.",
+        "de": "Beta 7: Carrier-Logos-Reiter wiederhergestellt und alle sichtbaren Versionsstände angeglichen."
+      },
+      "0.7.0-beta.8": {
+        "en": "Startup fix: embedded runtime directly into main.js again to avoid wrapper/build loading issues.",
+        "de": "Startfix: Laufzeit wieder direkt in main.js eingebettet, um Wrapper/Build-Ladeprobleme zu vermeiden."
+      },
+      "0.7.0-beta.9": {
+        "en": "Restored carrier logos in normal and compact VIS HTML.",
+        "de": "Carrier-Logos in normalem und kompaktem VIS-HTML wiederhergestellt."
+      },
+      "0.7.0-beta.10": {
+        "en": "Fix build error: restored missing statusColor method.",
+        "de": "Build-Fehler behoben: fehlende statusColor-Methode wiederhergestellt."
+      },
+      "0.7.0-beta.11": {
+        "en": "Restored carrier icons and removed status code number from badge.",
+        "de": "Carrier-Icons wiederhergestellt und Statuszahl aus dem Badge entfernt."
+      },
+      "0.7.0-beta.12": {
+        "en": "Fixed JS syntax regression in carrier icon patch.",
+        "de": "JS-Syntaxfehler im Carrier-Icon-Patch behoben."
+      },
+      "0.7.0-beta.13": {
+        "en": "Adaptive carrier tile backgrounds for better logo contrast.",
+        "de": "Adaptive Hintergründe für Carrier-Logos für besseren Kontrast."
+      },
+      "0.7.0-beta.14": {
+        "en": "Fixed carrier tile variable order build error.",
+        "de": "Build-Fehler durch falsche Reihenfolge der Carrier-Variablen behoben."
+      },
+      "0.7.0-beta.15": {
+        "en": "Improved Deutsche Post/dp logo contrast and normalized carrier label.",
+        "de": "Kontrast für Deutsche Post/dp-Logo verbessert und Carrier-Bezeichnung normalisiert."
+      }
+    },
+    "titleLang": {
+      "en": "ParcelNet",
+      "de": "ParcelNet"
+    },
+    "desc": {
+      "en": "Reads active or recent deliveries from Parcel App and exposes them as ioBroker states.",
+      "de": "Liest aktive oder kürzliche Sendungen aus Parcel App und stellt sie als ioBroker-States bereit."
+    },
+    "authors": [
+      "Thomas Radebold / OpenAI"
+    ],
+    "keywords": [
+      "parcel",
+      "deliveries",
+      "tracking",
+      "logistics"
+    ],
+    "platform": "Javascript/Node.js",
+    "icon": "parcelnet.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/radebold/ioBroker.parcelnet/master/admin/parcelnet.png",
+    "readme": "https://github.com/radebold/ioBroker.parcelnet/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "misc-data",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.7.17"
+      }
+    ],
+    "tier": 3,
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    }
+  },
+  "protectedNative": [
+    "apiKey"
+  ],
+  "encryptedNative": [
+    "apiKey"
+  ],
+  "native": {
+    "apiKey": "",
+    "filterMode": "active",
+    "pollIntervalMinutes": 15,
+    "requestTimeoutMs": 15000,
+    "maxItemsInHtml": 10,
+    "showTrackingNumberInHtml": true,
+    "logRawResponse": false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "name": "Connected to Parcel API",
+        "type": "boolean",
+        "role": "indicator.connected",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
+}
