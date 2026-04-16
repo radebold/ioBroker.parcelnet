@@ -157,3 +157,7 @@ This package contains the current beta preparation based on the 0.6.3 hotfix lin
 ## License
 
 MIT
+
+
+## 0.7.0-beta.2
+- Compact-HTML nutzt jetzt den kurzen `statusText` statt langer Event-Texte im Badge.
