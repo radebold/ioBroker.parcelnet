@@ -706,10 +706,10 @@ class ParcelNet extends utils.Adapter {
                 const latestEvent = this.getLatestEvent(delivery);
                 const statusCode = typeof delivery.status_code === "number" ? delivery.status_code : -1;
                 const statusText = this.statusText(delivery.status_code).replace(/\s*\(\d+\)$/, "");
-                const tileStyle = this.getCarrierTileStyle(carrier.key, compact);
                 const eta = this.formatEta(delivery);
                 const badgeColor = this.statusColor(statusCode);
                 const carrier = this.getCarrierMeta(delivery);
+                const tileStyle = this.getCarrierTileStyle(carrier.key, compact);
                 const icon = this.getCarrierIcon(delivery);
 
                 return `
