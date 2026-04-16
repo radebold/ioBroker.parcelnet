@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.7.0-beta.7",
+    "version": "0.7.0-beta.8",
     "news": {
       "0.5.0": {
         "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
@@ -14,6 +14,10 @@
       "0.7.0-beta.7": {
         "en": "Beta 7: restored carrier logos tab and aligned all visible version strings.",
         "de": "Beta 7: Carrier-Logos-Reiter wiederhergestellt und alle sichtbaren Versionsstände angeglichen."
+      },
+      "0.7.0-beta.8": {
+        "en": "Startup fix: embedded runtime directly into main.js again to avoid wrapper/build loading issues.",
+        "de": "Startfix: Laufzeit wieder direkt in main.js eingebettet, um Wrapper/Build-Ladeprobleme zu vermeiden."
       }
     },
     "titleLang": {
