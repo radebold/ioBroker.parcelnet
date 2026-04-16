@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.6.3-hotfix13",
+    "version": "0.6.3-hotfix14",
     "news": {
-      "0.6.3-hotfix12": {
+      "0.6.3-hotfix14": {
         "en": "GUI hotfix: removed crashing file upload fields and replaced them with stable path/URL inputs for carrier logos.",
         "de": "GUI-Hotfix: abstürzende Datei-Upload-Felder entfernt und durch stabile Pfad-/URL-Felder für Carrier-Logos ersetzt."
       }

@@ -145,7 +145,7 @@ Die Carrier-Logos werden jetzt direkt in den eigenen Dateibereich des Adapters h
 Das vermeidet Probleme mit Berechtigungen, Pfaden und der Auswahl in der Admin-UI.
 
 
-## 0.6.3-hotfix12
+## 0.6.3-hotfix14
 
 - GUI crash in the carrier logo tab removed
 - direct upload fields replaced by stable text inputs for local paths, adapter paths, VIS paths or HTTPS URLs

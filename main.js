@@ -244,6 +244,18 @@ class ParcelNet extends utils.Adapter {
             },
             native: {},
         });
+        await this.extendObjectAsync("activeCount", {
+            type: "state",
+            common: {
+                name: "Anzahl aktiver Lieferungen",
+                type: "number",
+                role: "value",
+                read: true,
+                write: false,
+                def: 0,
+            },
+            native: {},
+        });
         await this.extendObjectAsync("deliveries", {
             type: "channel",
             common: {
@@ -255,6 +267,18 @@ class ParcelNet extends utils.Adapter {
             type: "state",
             common: {
                 name: "Anzahl Lieferungen",
+                type: "number",
+                role: "value",
+                read: true,
+                write: false,
+                def: 0,
+            },
+            native: {},
+        });
+        await this.extendObjectAsync("deliveries.activeCount", {
+            type: "state",
+            common: {
+                name: "Anzahl aktiver Lieferungen",
                 type: "number",
                 role: "value",
                 read: true,
@@ -383,6 +407,8 @@ class ParcelNet extends utils.Adapter {
             const jsonRows = this.buildJsonRows(deliveries);
             const inDeliveryRows = jsonRows.filter(row => row.isInDelivery);
             await this.setStateAsync("deliveries.count", { val: deliveries.length, ack: true });
+            await this.setStateAsync("deliveries.activeCount", { val: deliveries.length, ack: true });
+            await this.setStateAsync("activeCount", { val: deliveries.length, ack: true });
             await this.setStateAsync("deliveries.json", { val: JSON.stringify(deliveries, null, 2), ack: true });
             await this.setStateAsync("deliveries.formatted", { val: formatted, ack: true });
             await this.setStateAsync("deliveries.nextEta", { val: nextEta, ack: true });
@@ -861,7 +887,7 @@ class ParcelNet extends utils.Adapter {
             ? `<div style="padding:${cardPadding};border-radius:14px;border:1px solid rgba(148,163,184,.25);color:#e5e7eb;background:rgba(15,23,42,.18);">Keine Lieferungen vorhanden</div>`
             : items.map((delivery) => {
                 const statusCode = typeof delivery.status_code === "number" ? delivery.status_code : -1;
-                const statusText = this.statusText(delivery.status_code);
+                const statusText = this.getDisplayStatus(delivery);
                 const badgeColor = this.statusColor(statusCode);
                 const carrier = this.getCarrierMeta(delivery);
                 const icon = this.getCarrierIcon(delivery);
