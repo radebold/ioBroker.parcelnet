@@ -637,6 +637,36 @@ class ParcelNet extends utils.Adapter {
     }
 
 
+
+    getCarrierTileStyle(carrierKey, compact) {
+        switch (carrierKey) {
+            case "deutschepost":
+                return {
+                    bg: "linear-gradient(180deg, rgba(45,55,72,.98), rgba(30,41,59,.98))",
+                    border: "1px solid rgba(255,255,255,.10)",
+                    imgFilter: "drop-shadow(0 1px 1px rgba(0,0,0,.45))"
+                };
+            case "dhl":
+                return {
+                    bg: "linear-gradient(180deg, rgba(253,224,71,.98), rgba(250,204,21,.98))",
+                    border: "1px solid rgba(146,64,14,.18)",
+                    imgFilter: "drop-shadow(0 1px 1px rgba(255,255,255,.15))"
+                };
+            case "dpd":
+                return {
+                    bg: "linear-gradient(180deg, rgba(153,27,27,.96), rgba(127,29,29,.96))",
+                    border: "1px solid rgba(255,255,255,.10)",
+                    imgFilter: "drop-shadow(0 1px 1px rgba(0,0,0,.35))"
+                };
+            default:
+                return {
+                    bg: "rgba(255,255,255,.96)",
+                    border: "1px solid rgba(15,23,42,.06)",
+                    imgFilter: "drop-shadow(0 1px 1px rgba(255,255,255,.35))"
+                };
+        }
+    }
+
     statusColor(code) {
         switch (code) {
             case 0:
@@ -676,6 +706,7 @@ class ParcelNet extends utils.Adapter {
                 const latestEvent = this.getLatestEvent(delivery);
                 const statusCode = typeof delivery.status_code === "number" ? delivery.status_code : -1;
                 const statusText = this.statusText(delivery.status_code).replace(/\s*\(\d+\)$/, "");
+                const tileStyle = this.getCarrierTileStyle(carrier.key, compact);
                 const eta = this.formatEta(delivery);
                 const badgeColor = this.statusColor(statusCode);
                 const carrier = this.getCarrierMeta(delivery);
@@ -684,8 +715,8 @@ class ParcelNet extends utils.Adapter {
                 return `
 <div style="padding:${cardPadding};border-radius:14px;background:#1f2937;color:#fff;border:1px solid rgba(255,255,255,.08);box-shadow:0 2px 10px rgba(0,0,0,.15);">
   <div style="display:grid;grid-template-columns:${iconSize}px minmax(0,1fr) auto;gap:${compact ? "8px" : "10px"};align-items:start;">
-    <div style="width:${iconSize}px;height:${iconSize}px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(255,255,255,.96);border-radius:${compact ? "10px" : "14px"};padding:${compact ? "4px" : "6px"};box-shadow:0 1px 4px rgba(0,0,0,.18);">
-      <img src="${this.escapeHtml(icon)}" alt="${this.escapeHtml(carrier.name)}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;background:transparent;"/>
+    <div style="width:${iconSize}px;height:${iconSize}px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:${tileStyle.bg};border:${tileStyle.border};border-radius:${compact ? "10px" : "14px"};padding:${compact ? "4px" : "6px"};box-shadow:0 1px 4px rgba(0,0,0,.18);">
+      <img src="${this.escapeHtml(icon)}" alt="${this.escapeHtml(carrier.name)}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;background:transparent;filter:${tileStyle.imgFilter};"/>
     </div>
     <div style="min-width:0;padding-left:${compact ? "4px" : "0"};">
       <div style="font-size:${titleSize};font-weight:700;line-height:${compact ? "1.1" : "1.3"};white-space:normal;word-break:break-word;">${this.escapeHtml(String(delivery.description || "Unbenannte Lieferung"))}</div>
