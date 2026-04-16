@@ -124,12 +124,19 @@ class ParcelNet extends utils.Adapter {
         }
     }
     async onStateChange(id, state) {
-        if (!state || state.ack) {
+        if (!state) {
             return;
         }
-        if (id === `${this.namespace}.tools.refreshNow` && Boolean(state.val)) {
-            await this.setStateAsync("tools.refreshNow", { val: false, ack: true });
-            await this.updateDeliveries("manual");
+        if (id === `${this.namespace}.tools.refreshNow`) {
+            this.log.info(`Manueller Refresh-Trigger empfangen: val=${String(state.val)} ack=${String(state.ack)}`);
+            if (Boolean(state.val)) {
+                await this.setStateAsync("tools.refreshNow", { val: false, ack: true });
+                await this.updateDeliveries("manual");
+            }
+            return;
+        }
+        if (state.ack) {
+            return;
         }
     }
     normalizeConfig() {
@@ -355,7 +362,7 @@ class ParcelNet extends utils.Adapter {
                 name: "Refresh now",
                 type: "boolean",
                 role: "button",
-                read: false,
+                read: true,
                 write: true,
                 def: false,
             },

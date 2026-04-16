@@ -165,3 +165,8 @@ Das vermeidet Probleme mit Berechtigungen, Pfaden und der Auswahl in der Admin-U
 
 ## 0.6.3-hotfix16
 - VIS: helle Logo-Kachel für bessere Lesbarkeit dunkler Carrier-Logos wie Amazon.
+
+
+## 0.6.3-hotfix17
+- Fix: manueller Refresh reagiert jetzt auch auf UI-Schreibvorgänge mit ack=true.
+- Refresh-State ist lesbar und schreibt einen Logeintrag bei manuellem Trigger.
