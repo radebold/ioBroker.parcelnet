@@ -580,14 +580,38 @@ class ParcelNet extends utils.Adapter {
         await this.setStateAsync("vis.html", { val: normal, ack: true });
         await this.setStateAsync("vis.htmlCompact", { val: compact, ack: true });
     }
+
+    private getCarrierMeta(delivery) {
+        const code = String(delivery?.carrier_code || "").toLowerCase().trim();
+        if (["amzlde", "amzl", "amazonde", "amazon", "amazon-logistics"].includes(code)) return { key: "amazon", name: "Amazon" };
+        if (code.includes("dhl")) return { key: "dhl", name: "DHL" };
+        if (code.includes("hermes")) return { key: "hermes", name: "Hermes" };
+        if (code.includes("dpd")) return { key: "dpd", name: "DPD" };
+        if (code.includes("ups")) return { key: "ups", name: "UPS" };
+        if (code.includes("gls")) return { key: "gls", name: "GLS" };
+        if (code.includes("fedex")) return { key: "fedex", name: "FedEx" };
+        if (code.includes("post")) return { key: "deutschepost", name: "Deutsche Post" };
+        return { key: code || "parcel", name: code || "Parcel" };
+    }
+
+    private getCarrierIcon(delivery): string {
+        const carrier = this.getCarrierMeta(delivery);
+        const configured = String((this.config)?.[`carrierLogo_${carrier.key}`] || "").trim();
+        if (configured) return configured;
+        return `/adapter/parcelnet/carriers/${carrier.key}.svg`;
+    }
+
     renderHtml(deliveries, compact) {
         const maxItems = Math.max(1, Number(this.config.maxItemsInHtml) || 10);
         const showTracking = Boolean(this.config.showTrackingNumberInHtml);
         const items = deliveries.slice(0, maxItems);
+
         const cardPadding = compact ? "8px 10px" : "12px 14px";
         const titleSize = compact ? "14px" : "16px";
         const textSize = compact ? "11px" : "13px";
         const gap = compact ? "8px" : "10px";
+        const iconSize = compact ? 38 : 52;
+
         const rows = items.length === 0
             ? `<div style="padding:${cardPadding};border-radius:12px;background:#1f2937;color:#fff;">Keine Lieferungen vorhanden</div>`
             : items.map((delivery) => {
@@ -596,50 +620,40 @@ class ParcelNet extends utils.Adapter {
                 const statusText = this.statusText(delivery.status_code);
                 const eta = this.formatEta(delivery);
                 const badgeColor = this.statusColor(statusCode);
+                const carrier = this.getCarrierMeta(delivery);
+                const icon = this.getCarrierIcon(delivery);
+
                 return `
 <div style="padding:${cardPadding};border-radius:14px;background:#1f2937;color:#fff;border:1px solid rgba(255,255,255,.08);box-shadow:0 2px 10px rgba(0,0,0,.15);">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-    <div style="font-size:${titleSize};font-weight:700;line-height:1.3;">${this.escapeHtml(String(delivery.description || "Unbenannte Lieferung"))}</div>
-    <div style="font-size:${textSize};padding:3px 8px;border-radius:999px;background:${badgeColor};white-space:nowrap;">${this.escapeHtml(statusText)}</div>
-  </div>
-  <div style="margin-top:6px;font-size:${textSize};opacity:.92;line-height:1.45;">
-    <div>Carrier: <b>${this.escapeHtml(String(delivery.carrier_code || "-"))}</b></div>
-    ${showTracking ? `<div>Tracking: <b>${this.escapeHtml(String(delivery.tracking_number || "-"))}</b></div>` : ""}
-    ${eta ? `<div>ETA: <b>${this.escapeHtml(eta)}</b></div>` : ""}
-    ${latestEvent?.event ? `<div>Letztes Event: <b>${this.escapeHtml(latestEvent.event)}</b></div>` : ""}
-    ${latestEvent?.location ? `<div>Ort: <b>${this.escapeHtml(latestEvent.location)}</b></div>` : ""}
+  <div style="display:grid;grid-template-columns:${iconSize}px minmax(0,1fr) auto;gap:${compact ? "8px" : "10px"};align-items:start;">
+    <div style="width:${iconSize}px;height:${iconSize}px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(255,255,255,.96);border-radius:${compact ? "10px" : "14px"};padding:${compact ? "4px" : "6px"};box-shadow:0 1px 4px rgba(0,0,0,.18);">
+      <img src="${this.escapeHtml(icon)}" alt="${this.escapeHtml(carrier.name)}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;background:transparent;"/>
+    </div>
+    <div style="min-width:0;padding-left:${compact ? "4px" : "0"};">
+      <div style="font-size:${titleSize};font-weight:700;line-height:${compact ? "1.1" : "1.3"};white-space:normal;word-break:break-word;">${this.escapeHtml(String(delivery.description || "Unbenannte Lieferung"))}</div>
+      <div style="margin-top:${compact ? "1px" : "6px"};font-size:${textSize};opacity:.92;line-height:1.45;">
+        <div>Carrier: <b>${this.escapeHtml(carrier.name)}</b></div>
+        ${showTracking ? `<div>Tracking: <b>${this.escapeHtml(String(delivery.tracking_number || "-"))}</b></div>` : ""}
+        ${eta ? `<div>ETA: <b>${this.escapeHtml(eta)}</b></div>` : ""}
+        ${latestEvent?.event ? `<div>Letztes Event: <b>${this.escapeHtml(latestEvent.event)}</b></div>` : ""}
+        ${latestEvent?.location && !compact ? `<div>Ort: <b>${this.escapeHtml(latestEvent.location)}</b></div>` : ""}
+      </div>
+    </div>
+    <div style="font-size:${compact ? "11px" : textSize};padding:${compact ? "4px 8px" : "3px 8px"};border-radius:999px;background:${badgeColor};white-space:nowrap;align-self:start;">${this.escapeHtml(statusText)}</div>
   </div>
 </div>`;
             }).join("");
+
         return `
 <div style="font-family:Arial,sans-serif;background:#111827;color:#fff;padding:${compact ? "10px" : "14px"};border-radius:16px;">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:${gap};gap:8px;">
-    <div style="font-size:${compact ? "16px" : "18px"};font-weight:700;">Parcel Lieferungen</div>
-    <div style="font-size:${textSize};opacity:.8;">${deliveries.length} aktiv</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <div style="font-size:${compact ? "18px" : "20px"};font-weight:700;">Parcel Lieferungen</div>
+    <div style="font-size:${textSize};opacity:.9;">${deliveries.length} aktiv</div>
   </div>
-  <div style="display:grid;gap:${gap};">
+  <div style="display:flex;flex-direction:column;gap:${gap};">
     ${rows}
   </div>
-</div>`.trim();
-    }
-    statusColor(statusCode) {
-        switch (statusCode) {
-            case 0:
-                return "#15803d";
-            case 2:
-                return "#2563eb";
-            case 3:
-                return "#7c3aed";
-            case 4:
-                return "#ea580c";
-            case 6:
-            case 7:
-                return "#dc2626";
-            case 8:
-                return "#0f766e";
-            default:
-                return "#4b5563";
-        }
+</div>`;
     }
     escapeHtml(input) {
         return input
