@@ -157,3 +157,7 @@ Das vermeidet Probleme mit Berechtigungen, Pfaden und der Auswahl in der Admin-U
 - Carrier-Mapping für Amazon erweitert
 - `amzlde` wird jetzt korrekt als **Amazon** erkannt
 - zusätzliche Amazon-Aliasse ergänzt (`amzl`, `amazonde`)
+
+
+## 0.6.3-hotfix15
+- Fix: `getDisplayStatus is not a function`

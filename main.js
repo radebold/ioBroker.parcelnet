@@ -620,6 +620,14 @@ class ParcelNet extends utils.Adapter {
         }
         return String(delivery?.date_expected || '').trim();
     }
+    getDisplayStatus(delivery) {
+        const latestEvent = this.getLatestEvent(delivery);
+        const eventText = String(latestEvent?.event || '').trim();
+        if (eventText) {
+            return eventText;
+        }
+        return this.statusText(delivery?.status_code);
+    }
     shouldShowDemoWhenEmpty() {
         return this.config?.showDemoWhenEmpty !== false;
     }
