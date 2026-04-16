@@ -87,6 +87,7 @@ class ParcelNet extends utils.Adapter {
         this.on("unload", this.onUnload.bind(this));
     }
     async onReady() {
+        await this.ensureFileMetaObject();
         await this.createObjects();
         this.subscribeStates("tools.refreshNow");
         const previousCountState = await this.getStateAsync("deliveries.count");
@@ -502,14 +503,26 @@ class ParcelNet extends utils.Adapter {
         if (input.startsWith('data:vis.0/')) {
             return `/${input.substring(5)}`;
         }
+        if (input.startsWith('parcelnet.0.files/')) {
+            return `/${input}`;
+        }
         if (input.startsWith('parcelnet.0/')) {
             return `/${input}`;
+        }
+        if (input.startsWith('parcelnet.0.files:')) {
+            return `/${input.replace(':', '/')}`;
         }
         if (input.startsWith('parcelnet.0:')) {
             return `/${input.replace(':', '/')}`;
         }
+        if (input.startsWith('data:parcelnet.0.files/')) {
+            return `/${input.substring(5)}`;
+        }
         if (input.startsWith('data:parcelnet.0/')) {
             return `/${input.substring(5)}`;
+        }
+        if (!input.startsWith('/') && !/^https?:/i.test(input) && !input.startsWith('data:')) {
+            return `/${this.namespace}.files/${input.replace(/^\/+/, '')}`;
         }
         return input;
     }

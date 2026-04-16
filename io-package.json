@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.6.3-hotfix7",
+    "version": "0.6.3-hotfix8",
     "news": {
       "0.5.0": {
         "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
@@ -39,7 +39,9 @@
       "0.6.3-hotfix7": {
         "en": "Upload carrier logos into the adapter file area instead of vis.0 to avoid permission/path issues.",
         "de": "Carrier-Logos werden jetzt in den eigenen Adapter-Dateibereich statt nach vis.0 hochgeladen, um Berechtigungs-/Pfadprobleme zu vermeiden."
-      }
+      },
+      "de": "Hotfix 8: Upload-Felder für Carrier-Logos in der Admin-UI auf korrektes fileSelector/objectID/upload-Schema umgestellt.",
+      "en": "Hotfix 8: Carrier logo upload fields in admin UI switched to the correct fileSelector/objectID/upload scheme."
     },
     "titleLang": {
       "en": "ParcelNet",
@@ -122,5 +124,6 @@
       },
       "native": {}
     }
-  ]
+  ],
+  "version": "0.6.3-hotfix8"
 }
