@@ -1,3 +1,8 @@
+## 0.6.3-hotfix10
+
+- Fix: Adapter startete nicht mehr, weil `ensureFileMetaObject()` fehlte.
+- Datei-Metaobjekt `parcelnet.0.files` wird jetzt sauber angelegt.
+
 # ioBroker.parcelnet
 
 Ein schlanker ioBroker-Adapter in **TypeScript** für die Parcel-App-API.
@@ -85,3 +90,100 @@ Der Adapter speichert den API-Key als `protectedNative` und `encryptedNative` in
 ## Lizenz
 
 MIT
+
+
+## VIS JSON
+
+- `parcelnet.0.allProviderJson` enthält ein flaches JSON-Array für VIS json-Widgets
+- `parcelnet.0.inDelivery` enthält nur Sendungen mit Status `In Zustellung`
+- `parcelnet.0.inDeliveryCount` enthält die Anzahl dieser Sendungen
+
+## VIS-HTML
+
+Für VIS genügt ein HTML-/String-Widget mit einem dieser States:
+
+- `parcelnet.0.vis.html`
+- `parcelnet.0.vis.htmlCompact`
+
+Die HTML-Ansicht ist transparent und für Scrollen innerhalb des Widgets ausgelegt.
+
+## Carrier-Logos per Admin
+
+Im Reiter **Carrier-Logos** kann pro Carrier ein eigenes Logo gewählt werden.
+
+Empfohlener Ablauf:
+
+1. Datei im ioBroker-Dateisystem hochladen, zum Beispiel nach `vis.0 / main / img / parcelnet`
+2. Im Adapter unter **Carrier-Logos** das passende Bild pro Carrier auswählen
+3. Adapter speichern
+
+Unterstützte Formate:
+- PNG
+- SVG
+- JPG/JPEG
+- WEBP
+
+## Demo-Ansicht
+
+Wenn die Parcel-API keine Sendungen liefert, kann optional eine Demo-Ansicht für VIS eingeblendet werden.
+
+Schalter dafür:
+- **Allgemein → Demo-Carrier anzeigen, wenn die API keine Sendungen liefert**
+
+Wichtig:
+- Die Demo erscheint nur in `vis.html` und `vis.htmlCompact`
+- Die echten Lieferstates unter `deliveries.*` bleiben dabei leer
+
+
+## Hotfix 7
+
+Die Carrier-Logos werden jetzt direkt in den eigenen Dateibereich des Adapters hochgeladen:
+
+- Zielordner: `/parcelnet.0/carriers`
+- nicht mehr: `vis.0/main/img/parcelnet`
+
+Das vermeidet Probleme mit Berechtigungen, Pfaden und der Auswahl in der Admin-UI.
+
+
+## 0.6.3-hotfix14
+
+- GUI crash in the carrier logo tab removed
+- direct upload fields replaced by stable text inputs for local paths, adapter paths, VIS paths or HTTPS URLs
+- built-in fallback icons remain available when fields are empty
+
+
+## Hotfix 13
+
+- Carrier-Mapping für Amazon erweitert
+- `amzlde` wird jetzt korrekt als **Amazon** erkannt
+- zusätzliche Amazon-Aliasse ergänzt (`amzl`, `amazonde`)
+
+
+## 0.6.3-hotfix15
+- Fix: `getDisplayStatus is not a function`
+
+
+## 0.6.3-hotfix16
+- VIS: helle Logo-Kachel für bessere Lesbarkeit dunkler Carrier-Logos wie Amazon.
+
+
+## 0.6.3-hotfix17
+- Fix: manueller Refresh reagiert jetzt auch auf UI-Schreibvorgänge mit ack=true.
+- Refresh-State ist lesbar und schreibt einen Logeintrag bei manuellem Trigger.
+
+
+## 0.6.3-hotfix18
+- Bereinigung: unnötiges Objekt `parcelnet.0.files` entfernt.
+- Adapter legt kein `files`-Metaobjekt mehr an und versucht vorhandenes Legacy-Objekt beim Start zu löschen.
+
+
+## 0.6.3-hotfix19
+- Fix: Legacy-Objekt `parcelnet.0.files` wird beim Start rekursiv entfernt.
+
+
+## 0.6.3-hotfix20
+- Mobile/Compact-HTML optimiert: kleineres Logo, kleineres Badge, engeres Padding und saubererer Titelumbruch auf dem Handy.
+
+
+## 0.6.3-hotfix21
+- Mobile/Compact: Textstart einige Pixel nach rechts verschoben, damit Titel nicht mehr am Logo klebt.
