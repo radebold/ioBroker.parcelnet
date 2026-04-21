@@ -1,76 +1,38 @@
 {
   "common": {
     "name": "parcelnet",
-    "version": "0.7.0-beta.19",
+    "version": "0.7.0-beta.20",
     "news": {
-      "0.5.0": {
-        "en": "Initial TypeScript adapter version with Parcel API polling, item states, manual refresh and VIS HTML output.",
-        "de": "Erste TypeScript-Adapterversion mit Parcel-API-Polling, Einzelzuständen, manuellem Refresh und VIS-HTML-Ausgabe."
-      },
-      "0.7.0-beta.6": {
-        "en": "Beta 6: version alignment across all package files while keeping the working carrier logo UI.",
-        "de": "Beta 6: Versionsabgleich über alle Paketdateien bei Beibehaltung der funktionierenden Carrier-Logo-UI."
-      },
-      "0.7.0-beta.7": {
-        "en": "Beta 7: restored carrier logos tab and aligned all visible version strings.",
-        "de": "Beta 7: Carrier-Logos-Reiter wiederhergestellt und alle sichtbaren Versionsstände angeglichen."
-      },
-      "0.7.0-beta.8": {
-        "en": "Startup fix: embedded runtime directly into main.js again to avoid wrapper/build loading issues.",
-        "de": "Startfix: Laufzeit wieder direkt in main.js eingebettet, um Wrapper/Build-Ladeprobleme zu vermeiden."
-      },
-      "0.7.0-beta.9": {
-        "en": "Restored carrier logos in normal and compact VIS HTML.",
-        "de": "Carrier-Logos in normalem und kompaktem VIS-HTML wiederhergestellt."
-      },
-      "0.7.0-beta.10": {
-        "en": "Fix build error: restored missing statusColor method.",
-        "de": "Build-Fehler behoben: fehlende statusColor-Methode wiederhergestellt."
-      },
-      "0.7.0-beta.11": {
-        "en": "Restored carrier icons and removed status code number from badge.",
-        "de": "Carrier-Icons wiederhergestellt und Statuszahl aus dem Badge entfernt."
-      },
-      "0.7.0-beta.12": {
-        "en": "Fixed JS syntax regression in carrier icon patch.",
-        "de": "JS-Syntaxfehler im Carrier-Icon-Patch behoben."
-      },
-      "0.7.0-beta.13": {
-        "en": "Adaptive carrier tile backgrounds for better logo contrast.",
-        "de": "Adaptive Hintergründe für Carrier-Logos für besseren Kontrast."
-      },
-      "0.7.0-beta.14": {
-        "en": "Fixed carrier tile variable order build error.",
-        "de": "Build-Fehler durch falsche Reihenfolge der Carrier-Variablen behoben."
-      },
-      "0.7.0-beta.15": {
-        "en": "Improved Deutsche Post/dp logo contrast and normalized carrier label.",
-        "de": "Kontrast für Deutsche Post/dp-Logo verbessert und Carrier-Bezeichnung normalisiert."
-      },
-      "0.7.0-beta.16": {
-        "en": "Fixed logo lookup to prefer UI-configured carrier logos after carrier normalization.",
-        "de": "Logo-Lookup korrigiert: UI-gepflegte Carrier-Logos haben jetzt nach der Carrier-Normalisierung Vorrang."
-      },
-      "0.7.0-beta.17": {
-        "en": "Updated adapter icon to the provided ParcelNet marker icon.",
-        "de": "Adapter-Icon auf das bereitgestellte ParcelNet-Marker-Icon aktualisiert."
-      },
-      "0.7.0-beta.18": {
-        "en": "Restored normalized logo lookup so UI-configured Deutsche Post logo is used for dp.",
-        "de": "Normalisierter Logo-Lookup wiederhergestellt, damit bei dp das in der UI gepflegte Deutsche-Post-Logo verwendet wird."
-      },
-      "0.7.0-beta.19": {
-        "en": "Fixed missing normalizeCarrierKey method in runtime build.",
-        "de": "Fehlende Methode normalizeCarrierKey im Runtime-Build behoben."
+      "0.7.0-beta.20": {
+        "en": "Checker cleanup: README cleaned, workflow added, admin dependency updated and metadata aligned.",
+        "de": "Checker-Bereinigung: README bereinigt, Workflow ergänzt, Admin-Abhängigkeit aktualisiert und Metadaten angeglichen."
       }
     },
     "titleLang": {
       "en": "ParcelNet",
-      "de": "ParcelNet"
+      "de": "ParcelNet",
+      "ru": "ParcelNet",
+      "pt": "ParcelNet",
+      "nl": "ParcelNet",
+      "fr": "ParcelNet",
+      "it": "ParcelNet",
+      "es": "ParcelNet",
+      "pl": "ParcelNet",
+      "uk": "ParcelNet",
+      "zh-cn": "ParcelNet"
     },
     "desc": {
-      "en": "Reads active or recent deliveries from Parcel App and exposes them as ioBroker states.",
-      "de": "Liest aktive oder kürzliche Sendungen aus Parcel App und stellt sie als ioBroker-States bereit."
+      "en": "Reads active or recent deliveries from Parcel App and exposes them as ioBroker states and VIS HTML.",
+      "de": "Liest aktive oder aktuelle Sendungen aus Parcel App und stellt sie als ioBroker-States und VIS-HTML bereit.",
+      "ru": "Читает активные или недавние отправления из Parcel App и предоставляет их как состояния ioBroker и VIS HTML.",
+      "pt": "Lê entregas ativas ou recentes do Parcel App e as disponibiliza como estados do ioBroker e HTML para VIS.",
+      "nl": "Leest actieve of recente zendingen uit Parcel App en stelt ze beschikbaar als ioBroker-statussen en VIS-HTML.",
+      "fr": "Lit les livraisons actives ou récentes de Parcel App et les expose comme états ioBroker et HTML VIS.",
+      "it": "Legge le spedizioni attive o recenti da Parcel App e le espone come stati ioBroker e HTML VIS.",
+      "es": "Lee entregas activas o recientes de Parcel App y las expone como estados de ioBroker y HTML para VIS.",
+      "pl": "Odczytuje aktywne lub ostatnie przesyłki z Parcel App i udostępnia je jako stany ioBroker oraz HTML VIS.",
+      "uk": "Зчитує активні або нещодавні відправлення з Parcel App і надає їх як стани ioBroker та VIS HTML.",
+      "zh-cn": "从 Parcel App 读取活动或最近的包裹，并将其作为 ioBroker 状态和 VIS HTML 提供。"
     },
     "authors": [
       "Thomas Radebold / OpenAI"
@@ -102,7 +64,7 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=6.7.17"
+        "admin": ">=7.6.17"
       }
     ],
     "tier": 3,
